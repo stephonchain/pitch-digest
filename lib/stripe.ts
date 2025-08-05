@@ -5,7 +5,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-06-20',
+  // apiVersion: '2024-06-20',   ← tu peux commenter ou supprimer cette ligne
 });
 
 export const DIGEST_PACK_PRICE_ID = process.env.STRIPE_PRICE_PACK_30;
