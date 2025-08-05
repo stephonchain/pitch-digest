@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  clerkId         String   @unique
+  freeDigestsUsed Int      @default(0)
+  packs           Pack[]
+  digests         Digest[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Pack {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  digestsLeft Int
+  purchasedAt DateTime @default(now())
+  stripeSessionId String?
+
+  @@map("packs")
+}
+
+model Digest {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  videoId   String
+  videoTitle String
+  markdown  String
+  createdAt DateTime @default(now())
+
+  @@map("digests")
+}
